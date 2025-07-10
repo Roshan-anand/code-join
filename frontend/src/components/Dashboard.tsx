@@ -3,15 +3,17 @@ import { projects } from "../lib/languages";
 import { createElement, useEffect, useRef, useState } from "react";
 import { RiLoaderFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ReduxState } from "../providers/redux/store";
 import { toast } from "react-toastify";
 import useRoomServices from "../hooks/RoomService";
 import { Project } from "@/lib/Types";
 import { MdAdd } from "react-icons/md";
+import { setRunCmd } from "@/providers/redux/slices/file";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   //global state from redux
   const { email } = useSelector((state: ReduxState) => state.room);
@@ -89,7 +91,10 @@ const Dashboard = () => {
                     <div className="flex justify-end">
                       <button
                         className="flex items-center gap-2 rounded-md bg-accent-500 px-2"
-                        onClick={() => createRoom(currentProject.title)}
+                        onClick={() => {
+                          dispatch(setRunCmd(currentProject.runCmd));
+                          createRoom(currentProject.image);
+                        }}
                       >
                         <MdAdd />
                         <h3>create</h3>

@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { ReduxState } from "../../providers/redux/store";
 import { setActiveSection } from "../../providers/redux/slices/editor";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import useTerminalService from "../../hooks/TerminalService";
 import useEditorService from "../../hooks/EditorService";
 
@@ -65,11 +64,10 @@ const CodeEditor = () => {
 
       const cmd = `echo "${filteredCode}" > ${openedFile}`;
       runStream(cmd, false);
-
-      //setting up the run command
-      if (runCmd == "") toast.error("Language not supported");
-      else setTerminalInput(`${runCmd} ${openedFile}\n`);
     }
+    //setting up the run command
+    if (!runCmd) return;
+    setTerminalInput(`${runCmd}\n`);
   };
 
   //to save the code on unmount

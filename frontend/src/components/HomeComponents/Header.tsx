@@ -6,9 +6,9 @@ const Header = () => {
   const { profile, userName } = useSelector((state: ReduxState) => state.room);
   return (
     <header className="px-3 py-2 flex items-center justify-between">
-      <h1 className="text-accent-300">JOIN CODE.</h1>
+      <h1 className="text-accent-300">CODE JOIN.</h1>
       <div className="w-[8vh] overflow-hidden min-w-[60px] bg-accent-300 rounded-full relative">
-        {!profile ? (
+        {profile ? (
           <img
             src={`${profile}`}
             alt={`${userName}`}

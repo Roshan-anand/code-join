@@ -5,22 +5,15 @@ import { Socket } from "socket.io";
 import { langKey } from "../helpers/Types";
 
 //funtion to create a container
-export const createContainer = async (lang: langKey, socket: Socket) => {
+export const createContainer = async (image: langKey) => {
   try {
-    const language = languages[lang as langKey];
-
     // Creating a container with proper command array
     let container = await docker.createContainer({
-      Image: language.env,
+      Image: image,
       AttachStdin: true,
       AttachStdout: true,
       Tty: true,
-      WorkingDir: "/root",
-      Cmd: [
-        "bash",
-        "-c",
-        `echo '${language.code}' > main.${language.ext} && exec bash`,
-      ],
+      WorkingDir: "/app",
     });
 
     await container.start();
@@ -44,7 +37,7 @@ export const runNonInteractiveCmd = async (
   //to send folder details
   if (send) {
     const exec = await container.exec({
-      Cmd: ["bash", "-c", "ls /root -R"],
+      Cmd: ["bash", "-c", 'ls ./ -R --ignore="node_modules"'],
       AttachStdout: true,
       AttachStderr: true,
     });

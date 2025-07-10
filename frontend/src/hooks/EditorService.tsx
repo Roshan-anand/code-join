@@ -46,16 +46,16 @@ const useEditorService = (
   useEffect(() => {
     if (!openedFile || !folderStructure) return;
 
-    const { root } = convertToFolder(folderStructure);
+    const root = convertToFolder(folderStructure);
     const target = openedFile.split("/");
 
     const checkExistence = (i: number, parent: FolderStructureType) => {
       if (!parent[target[i]]) {
         dispatch(
           setOpenedFile({
-            openedFile: "",
+            openedFile: null,
             loc: "",
-            langObj: { name: "plaintext", runCmd: "" },
+            lang: "plaintext",
           })
         );
         dispatch(setEditorCode(null));

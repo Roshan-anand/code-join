@@ -61,11 +61,11 @@ const useRoomServices = (
   };
 
   //to create a room
-  const createRoom = (lang: string) => {
+  const createRoom = (image: string) => {
     socket?.emit("create-room", {
       name: userName,
       profile,
-      lang,
+      image,
     });
   };
 

@@ -14,7 +14,7 @@ docker.listContainers((err, containers) => {
   if (err) {
     console.error("Error connecting to Docker daemon:", err);
   } else {
-    console.log("Containers running on remote host:", containers?.[0].Id);
+    console.log("Containers running on remote host:", containers?.[0]?.Id);
   }
 });
 

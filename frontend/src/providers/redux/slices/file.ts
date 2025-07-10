@@ -24,9 +24,8 @@ const FileSlice = createSlice({
   initialState,
   reducers: {
     setOpenedFile: (state, action) => {
-      const { langObj, openedFile, loc } = action.payload;
-      state.editorLang = langObj.name;
-      state.runCmd = langObj.runCmd;
+      const { lang, openedFile, loc } = action.payload;
+      state.editorLang = lang;
       state.openedFile = openedFile;
       state.currentFolder = loc;
     },
@@ -42,6 +41,9 @@ const FileSlice = createSlice({
     setCurrentFolder: (state, action) => {
       state.currentFolder = action.payload;
     },
+    setRunCmd: (state, action) => {
+      state.runCmd = action.payload;
+    },
   },
 });
 
@@ -51,6 +53,7 @@ export const {
   setSideBarOpt,
   setFolderStructure,
   setCurrentFolder,
+  setRunCmd,
 } = FileSlice.actions;
 
 export default FileSlice.reducer;

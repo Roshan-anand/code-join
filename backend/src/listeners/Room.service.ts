@@ -9,14 +9,14 @@ import crypto from "crypto";
 
 const RoomOperations = (socket: Socket) => {
   //event to create a room
-  socket.on("create-room", async ({ name, profile, lang }) => {
+  socket.on("create-room", async ({ name, profile, image }) => {
     //generate a random room id using crypto
     const roomID = crypto.randomBytes(8).toString("hex");
 
     if (rooms.has(roomID)) {
       socket.emit("error", "Room already exists");
     } else {
-      const { containerID } = await createContainer(lang, socket);
+      const { containerID } = await createContainer(image);
       //if container is not created then emit error
       if (!containerID) {
         socket.emit("error", "Error while creating the environment");

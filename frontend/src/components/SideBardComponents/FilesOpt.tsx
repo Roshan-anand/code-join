@@ -26,12 +26,8 @@ const FilesOpt = () => {
       if (!roomID) return;
       const openedFile = `${loc}${fileName}`;
       setactiveEle(openedFile);
-      const langObj = langExt[fileName.split(".").pop() as string] || {
-        name: "plaintext",
-        runCmd: "",
-      };
-
-      dispatch(setOpenedFile({ langObj, openedFile, loc }));
+      const lang= langExt[fileName.split(".").pop() as string] || "plaintext";
+      dispatch(setOpenedFile({ lang, openedFile, loc }));
     };
 
     const handleFolderClick = (loc: string, key: string) => {
@@ -59,7 +55,7 @@ const FilesOpt = () => {
         } else {
           //if it is a folder
           elements.push(
-            <details key={key} className="ml-3">
+            <details key={key} className="[&_h4]:pl-3">
               <summary
                 className={`file-txt ${
                   activeEle === `${loc}${key}` && "bg-accent-400"
@@ -83,13 +79,13 @@ const FilesOpt = () => {
     };
 
     if (!folderStructure) return;
-    const { root } = convertToFolder(folderStructure);
+    const root  = convertToFolder(folderStructure);
     setfolderElement(createElements(root as FolderStructureType, ""));
   }, [folderStructure, activeEle, dispatch, roomID, openedFile]);
 
   return (
     <figure className="size-full px-1">
-      <section className="flex justify-between border-b-2">root</section>
+      <section className="flex justify-between border-b-2">app</section>
       {folderElement}
     </figure>
   );
