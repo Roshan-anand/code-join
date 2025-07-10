@@ -2,22 +2,22 @@ import { useEffect, useRef, useState } from "react";
 import { FaFile, FaUserFriends } from "react-icons/fa";
 import { IoOptionsSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { ReduxState } from "../../providers/redux/store";
 import {
   setActiveSection,
   setEditorWidth,
-} from "../../redux/slices/EditorSlice";
+} from "../../providers/redux/slices/editor";
 import RoomOpt from "../SideBardComponents/RoomOpt";
 import FilesOpt from "../SideBardComponents/FilesOpt";
-import { setSideBarOpt } from "../../redux/slices/FileSlice";
+import { setSideBarOpt } from "../../providers/redux/slices/file";
 
 const SideBar = () => {
   const dispatch = useDispatch();
   const { activeSection, editorWidth } = useSelector(
-    (state: RootState) => state.editor
+    (state: ReduxState) => state.editor
   );
 
-  const { sideBarOpt } = useSelector((state: RootState) => state.file);
+  const { sideBarOpt } = useSelector((state: ReduxState) => state.file);
 
   const [sideW, setsideW] = useState(0);
   const sidebarRef = useRef<HTMLDivElement>(null);

@@ -3,30 +3,30 @@ import type * as Monaco from "monaco-editor";
 import { useEffect, useState } from "react";
 import { FaCode, FaLaptopCode, FaPlay } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { setActiveSection } from "../../redux/slices/EditorSlice";
+import { ReduxState } from "../../providers/redux/store";
+import { setActiveSection } from "../../providers/redux/slices/editor";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import useTerminalService from "../../sockets/TerminalSocket";
-import useEditorService from "../../sockets/EditorSocket";
-import { useMyContext } from "../../utility/MyContext";
-import { setFolderStructure } from "../../redux/slices/FileSlice";
+import useEditorService from "../../hooks/EditorService";
+import { setFolderStructure } from "../../providers/redux/slices/file";
+import useTerminalService from "../../hooks/TerminalService";
+import { useWsContext } from "../../providers/context/config";
 
 const CodeEditorTest = () => {
   const navigate = useNavigate();
   //global state from redux
   const dispatch = useDispatch();
   const { editorHeight, activeSection } = useSelector(
-    (state: RootState) => state.editor
+    (state: ReduxState) => state.editor
   );
   const { editorLang, openedFile, runCmd, editorCode } = useSelector(
-    (state: RootState) => state.file
+    (state: ReduxState) => state.file
   );
-  const { roomID } = useSelector((state: RootState) => state.room);
+  const { roomID } = useSelector((state: ReduxState) => state.room);
 
   //redirect to dashboard if no roomID
   useEffect(() => {
-    if (!roomID) navigate("/dashboard");
+    if (!roomID) navigate("/home/dashboard");
   }, [roomID, navigate]);
 
   // Set custom theme for monaco editor
@@ -86,18 +86,25 @@ const CodeEditorTest = () => {
     };
   }, [activeSection, openedFile, runStream, editor]);
 
-  const { socket } = useMyContext();
+  const { socket } = useWsContext();
   useEffect(() => {
-    // joinRoom("123");
-    socket?.on("folder-details", (data: string) => {
+    if (!socket) return;
+    if (socket.hasListeners("folder-details")) return;
+
+    socket.on("folder-details", (data: string) => {
       dispatch(setFolderStructure(data));
     });
-    socket?.emit("join-test-room", {
+
+    socket.emit("join-test-room", {
       roomID,
       name: `name${Math.floor(Math.random() * 10)}`,
       profile: "jjsj",
     });
-  }, [socket]);
+
+    return () => {
+      socket.off("folder-details");
+    };
+  }, [socket, dispatch, roomID]);
 
   return (
     <>

@@ -1,24 +1,21 @@
 import { IoTerminal } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { setActiveSection } from "../../redux/slices/EditorSlice";
+import { ReduxState } from "../../providers/redux/store";
+import { setActiveSection } from "../../providers/redux/slices/editor";
 import { Terminal as XTerminal } from "@xterm/xterm";
 import { useEffect, useRef } from "react";
-import { FitAddon } from "@xterm/addon-fit";
-//@ts-ignore
+import useTerminalService from "../../hooks/TerminalService";
 import "@xterm/xterm/css/xterm.css";
-import useTerminalService from "../../sockets/TerminalSocket";
-import { useMyContext } from "../../utility/MyContext";
-import { FaPlus } from "react-icons/fa";
-
+import { useWsContext } from "../../providers/context/config";
+import { FitAddon } from "@xterm/addon-fit";
 const Terminal = () => {
   //Xterminal from context
-  const { setTerminal, terminal } = useMyContext();
+  const { setTerminal, terminal } = useWsContext();
 
   //global state from redux
   const dispatch = useDispatch();
   const { activeSection, editorHeight, editorWidth } = useSelector(
-    (state: RootState) => state.editor
+    (state: ReduxState) => state.editor
   );
 
   // Initialize terminal
@@ -26,14 +23,17 @@ const Terminal = () => {
   const fitAddon = useRef<FitAddon | null>(null);
   useEffect(() => {
     if (!terminalRef.current) return;
-    fitAddon.current = new FitAddon();
+    const fit = new FitAddon();
     const terminalInstance = new XTerminal({
       cursorBlink: true,
     });
-    setTerminal(terminalInstance);
-    terminalInstance.loadAddon(fitAddon.current);
+    terminalInstance.loadAddon(fit);
     terminalInstance.open(terminalRef.current);
-    fitAddon.current.fit();
+    requestAnimationFrame(() => {
+      fit.fit();
+    });
+    fitAddon.current = fit;
+    setTerminal(terminalInstance);
 
     return () => {
       terminalInstance.dispose();
@@ -77,9 +77,6 @@ const Terminal = () => {
       <header className="bg-soft py-2 px-3 flex items-center gap-3">
         <IoTerminal className="icon-md" />
         <h3>Terminal</h3>
-        <button className="ml-auto">
-          <FaPlus className="icon-md" />
-        </button>
       </header>
       <section className="flex-1 flex">
         <div ref={terminalRef} className="flex-1 size-full"></div>

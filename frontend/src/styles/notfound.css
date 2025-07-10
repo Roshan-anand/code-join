@@ -1,0 +1,37 @@
+@keyframes blinkCursor {
+  50% {
+    border-right-color: transparent;
+  }
+}
+
+@keyframes typeAndDelete {
+  0%,
+  10% {
+    width: 0;
+  }
+  45%,
+  55% {
+    width: 8.2em;
+  }
+  90%,
+  100% {
+    width: 0;
+  }
+}
+
+.terminal-loader {
+  font-family: "Courier New", Courier, monospace;
+  width: 50%;
+  max-width: 600px;
+  border: 0.3rem solid hsl(270, 50%, 32%);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.text {
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 0.2em solid hsl(270, 50%, 32%); /* Cursor */
+  animation: typeAndDelete 4s steps(11) infinite,
+    blinkCursor 0.5s step-end infinite alternate;
+}

@@ -1,18 +1,21 @@
 import { useDispatch, useSelector } from "react-redux";
-import { convertToFolder } from "../../utility/FolderConvertor";
-import { FolderStructureType } from "../../utility/Types";
-import { RootState } from "../../redux/store";
+import { convertToFolder } from "../../lib/FolderConvertor";
+import { FolderStructureType } from "../../lib/Types";
+import { ReduxState } from "../../providers/redux/store";
 import { useEffect, useState } from "react";
-import { setCurrentFolder, setOpenedFile } from "../../redux/slices/FileSlice";
-import { langExt } from "../../utility/languages";
+import {
+  setCurrentFolder,
+  setOpenedFile,
+} from "../../providers/redux/slices/file";
+import { langExt } from "../../lib/languages";
 
 const FilesOpt = () => {
   //global state from redux
   const dispatch = useDispatch();
   const { folderStructure, openedFile } = useSelector(
-    (state: RootState) => state.file
+    (state: ReduxState) => state.file
   );
-  const { roomID } = useSelector((state: RootState) => state.room);
+  const { roomID } = useSelector((state: ReduxState) => state.room);
 
   const [folderElement, setfolderElement] = useState<JSX.Element[]>([]);
   const [activeEle, setactiveEle] = useState("");

@@ -1,0 +1,125 @@
+import { FaSearch, FaToolbox } from "react-icons/fa";
+import { projects } from "../lib/languages";
+import { createElement, useEffect, useRef, useState } from "react";
+import { RiLoaderFill } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { ReduxState } from "../providers/redux/store";
+import { toast } from "react-toastify";
+import useRoomServices from "../hooks/RoomService";
+import { Project } from "@/lib/Types";
+import { MdAdd } from "react-icons/md";
+
+const Dashboard = () => {
+  const navigate = useNavigate();
+
+  //global state from redux
+  const { email } = useSelector((state: ReduxState) => state.room);
+
+  const [isLoading, setisLoading] = useState(false);
+  const [currentProject, setCurrentProject] = useState<Project | null>(null);
+
+  //to check if user is authenticated
+  useEffect(() => {
+    if (!email) navigate("/");
+  }, [email, navigate]);
+
+  const { createRoom, joinRoom } = useRoomServices(setisLoading); //hook to listen to room events
+
+  //to join a room
+  const idInput = useRef<HTMLInputElement>(null);
+  const handleJoinRoom = () => {
+    const value = idInput.current?.value;
+    if (!value || value == "") {
+      toast.error("Please enter a room ID");
+      return;
+    }
+    joinRoom(value);
+  };
+
+  return (
+    <main className="mt-20 h-[90%] flex flex-col items-center">
+      <div className="bg-secondary w-2/3 h-[35vh] md:size-[800px] rounded-lg overflow-hidden  flex flex-col">
+        {isLoading && (
+          <div className="dashboard-loader">
+            <RiLoaderFill className="size-[100px] text-accent-500 animate-spin mx-auto" />
+          </div>
+        )}
+        <header className="p-3 bg-soft flex gap-5">
+          <FaToolbox className="icon-md" />
+          <h3>Choose a language to work</h3>
+        </header>
+
+        <section className="flex-1 flex px-2 gap-2 ">
+          <figure className="flex-1 flex flex-col gap-2 items-center px-4 py-2">
+            {projects.map((data) => {
+              return (
+                <button
+                  key={data.title}
+                  className="w-full rounded-lg bg-soft flex items-center gap-2 p-2"
+                  onClick={() => setCurrentProject(data)}
+                >
+                  {createElement(data.icon, { className: "icon-md" })}
+                  <h3 className="text-text">{data.title}</h3>
+                </button>
+              );
+            })}
+          </figure>
+          <div className="w-[2px] border-4 border-soft"></div>
+          <div className="flex flex-col items-end w-[70%] gap-2 py-2">
+            <figure className="border-2 border-accent-600 flex items-center w-1/2 py-1 rounded-md px-2">
+              <input type="text" className="grow outline-0" />
+              <FaSearch className="text-accent-600" />
+            </figure>
+
+            <article className="grow py-2 rounded-md w-[90%]">
+              {currentProject && (
+                <>
+                  <header className="p-3 bg-soft flex gap-5 relative">
+                    {createElement(currentProject.icon, {
+                      className: "icon-md",
+                    })}
+                    <h3>{currentProject.title}</h3>
+                    <p className="absolute top-0 right-0 px-2 py-1 border-l-[4px] border-b-[4px] font-bold border-secondary">
+                      {currentProject.type}
+                    </p>
+                  </header>
+                  <section className="p-3">
+                    <p>{currentProject.description}</p>
+                    <div className="flex justify-end">
+                      <button
+                        className="flex items-center gap-2 rounded-md bg-accent-500 px-2"
+                        onClick={() => createRoom(currentProject.title)}
+                      >
+                        <MdAdd />
+                        <h3>create</h3>
+                      </button>
+                    </div>
+                  </section>
+                </>
+              )}
+            </article>
+
+            <figure className="flex items-center w-fit p-3 gap-3">
+              <h3>OR</h3>
+              <input
+                type="text"
+                className="flex-1 px-1 border-2 border-accent-600 h-full rounded-md outline-none font-bold"
+                ref={idInput}
+                placeholder="roomID123"
+              />
+              <button
+                className="p-2 bg-accent-500 rounded-lg"
+                onClick={handleJoinRoom}
+              >
+                <h3>Join Room</h3>
+              </button>
+            </figure>
+          </div>
+        </section>
+      </div>
+    </main>
+  );
+};
+
+export default Dashboard;

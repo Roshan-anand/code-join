@@ -1,22 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import HomePg from "./pages/HomePg.tsx";
 import { Provider } from "react-redux";
-import { store } from "./redux/store.ts";
-//@ts-ignore
-import "./index.css";
-import Dashboard from "./pages/Dashboard.tsx";
-import ContextProvider from "./components/ContextProvider.tsx";
+import { store } from "./providers/redux/store.ts";
+import "@/styles/index.css";
 import { Bounce, ToastContainer } from "react-toastify";
-import { ConnectSocket } from "./sockets/ConnectSocket.tsx";
-
-const router = createBrowserRouter([
-  { path: "/", element: <App /> },
-  { path: "/home", element: <HomePg /> },
-  { path: "/dashboard", element: <Dashboard /> },
-]);
+import ContextProvider from "./providers/context/provider.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -30,12 +19,11 @@ createRoot(document.getElementById("root")!).render(
       pauseOnHover
       theme="dark"
       transition={Bounce}
-      />
+    />
     <ContextProvider>
-    <ConnectSocket />
       <Provider store={store}>
-        <RouterProvider router={router} />
+        <App />
       </Provider>
     </ContextProvider>
-    </StrictMode> 
+  </StrictMode>
 );

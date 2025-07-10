@@ -1,15 +1,23 @@
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 
-WORKDIR /app
+WORKDIR /client
 
-COPY package*.json ./
+ARG VITE_BACKEND_URL
+ENV VITE_BACKEND_URL=$VITE_BACKEND_URL
 
-RUN npm install
+COPY package.json package.json
+COPY pnpm-lock.yaml pnpm-lock.yaml
+
+RUN npm install -g pnpm
+RUN pnpm install
 
 COPY . .
+RUN pnpm build
 
-RUN npm run build
+FROM nginx:latest AS runner
 
-EXPOSE 5173
+COPY  --from=builder /client/nginx.conf /etc/nginx
+COPY --from=builder /client/dist /usr/share/nginx/html
 
-CMD ["npm", "start"]
+EXPOSE 80
+CMD [ "nginx", "-g", "daemon off;" ]

@@ -1,18 +1,23 @@
-// import { useEffect } from "react";
-import { FaGithub } from "react-icons/fa";
-import { useAuth } from "./utility/Hooks";
-function App() {
-  useAuth();
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Landing from "./pages/Landing";
+import Home from "./pages/Home";
+import Sandbox from "./components/Sandbox";
+import Dashboard from "./components/Dashboard";
+import NotFound from "./pages/NotFound";
+
+const App = () => {
   return (
-    <>
-      <header></header>
-      <main className="w-2/3 h-2/3 mx-auto mt-10">
-        <a href={`${import.meta.env.VITE_BACKEND_URL}/auth/github`}>
-          <FaGithub className="icon-lg" />
-        </a>
-      </main>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route index element={<Landing />} />
+        <Route path="/home" element={<Home />}>
+          <Route path="/home/sandbox" element={<Sandbox />} />
+          <Route path="/home/dashboard" element={<Dashboard />} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;

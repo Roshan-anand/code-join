@@ -3,28 +3,28 @@ import type * as Monaco from "monaco-editor";
 import { useEffect, useState } from "react";
 import { FaCode, FaLaptopCode, FaPlay } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { setActiveSection } from "../../redux/slices/EditorSlice";
+import { ReduxState } from "../../providers/redux/store";
+import { setActiveSection } from "../../providers/redux/slices/editor";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import useTerminalService from "../../sockets/TerminalSocket";
-import useEditorService from "../../sockets/EditorSocket";
+import useTerminalService from "../../hooks/TerminalService";
+import useEditorService from "../../hooks/EditorService";
 
 const CodeEditor = () => {
   const navigate = useNavigate();
   //global state from redux
   const dispatch = useDispatch();
   const { editorHeight, activeSection } = useSelector(
-    (state: RootState) => state.editor
+    (state: ReduxState) => state.editor
   );
   const { editorLang, openedFile, runCmd, editorCode } = useSelector(
-    (state: RootState) => state.file
+    (state: ReduxState) => state.file
   );
-  const { roomID } = useSelector((state: RootState) => state.room);
+  const { roomID } = useSelector((state: ReduxState) => state.room);
 
   //redirect to dashboard if no roomID
   useEffect(() => {
-    if (!roomID) navigate("/dashboard");
+    if (!roomID) navigate("/home/dashboard");
   }, [roomID, navigate]);
 
   // Set custom theme for monaco editor
