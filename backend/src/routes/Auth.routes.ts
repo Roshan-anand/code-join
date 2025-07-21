@@ -7,9 +7,11 @@ router.get("/github", passport.authenticate("github"));
 
 router.get(
   "/callback/github",
-  passport.authenticate("github", { failureRedirect: "/" }),
+  passport.authenticate("github", {
+    failureRedirect: `${process.env.FRONTEND_URL}/`,
+  }),
   (req, res) => {
-    res.redirect(`${process.env.EXTERNAL_FRONTEND_URL}/home/dashboard`);
+    res.redirect(`${process.env.FRONTEND_URL}/home/dashboard`);
   }
 );
 

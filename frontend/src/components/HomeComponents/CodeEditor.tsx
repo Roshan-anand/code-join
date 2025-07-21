@@ -8,7 +8,7 @@ import { setActiveSection } from "../../providers/redux/slices/editor";
 import { useNavigate } from "react-router-dom";
 import useTerminalService from "../../hooks/TerminalService";
 import useEditorService from "../../hooks/EditorService";
-
+import { AiOutlineExport } from "react-icons/ai";
 const CodeEditor = () => {
   const navigate = useNavigate();
   //global state from redux
@@ -19,7 +19,7 @@ const CodeEditor = () => {
   const { editorLang, openedFile, runCmd, editorCode } = useSelector(
     (state: ReduxState) => state.file
   );
-  const { roomID } = useSelector((state: ReduxState) => state.room);
+  const { roomID ,devUrl} = useSelector((state: ReduxState) => state.room);
 
   //redirect to dashboard if no roomID
   useEffect(() => {
@@ -99,6 +99,9 @@ const CodeEditor = () => {
           <button className="mr-2" onClick={handleRunPrg}>
             <FaPlay className="icon-md" />
           </button>
+          <a href={devUrl!} target="_blank" >
+            <AiOutlineExport className="icon-md" />
+          </a>
         </header>
         {editorCode !== null ? (
           <>

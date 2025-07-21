@@ -1,11 +1,10 @@
 import internal from "stream";
 
-export type langKey = "NodeJS" | "python" | "java" | "go" | "c" | "cpp";
+export type langKey = "NodeJS" | "GOlang" | "ReactJS";
 
-export type LangInfoType = {
-  env: string;
-  code: string;
-  ext: string;
+export type ProjectInfo = {
+  image: string;
+  port: string;
 };
 
 //type for rooms object

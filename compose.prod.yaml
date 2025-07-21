@@ -1,0 +1,54 @@
+services:
+  server:
+    user: "0:0"
+    image: codejoin-s:0.1.0
+    env_file:
+      - ./backend/.env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - proxy_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.server.rule=Host(`server.roshananand.cloud`)"
+      - "traefik.http.routers.server.entrypoints=websecure"
+      - "traefik.http.routers.server.tls.certresolver=letsencrypt"
+      - "traefik.http.services.server.loadbalancer.server.port=5000"
+    deploy:
+      update_config:
+        order: start-first
+  client:
+    image: codejoin-c:0.1.0
+    networks:
+      - proxy_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.client.rule=Host(`codejoin.roshananand.cloud`)"
+      - "traefik.http.routers.client.entrypoints=websecure"
+      - "traefik.http.routers.client.tls.certresolver=letsencrypt"
+      - "traefik.http.services.client.loadbalancer.server.port=80"
+    deploy:
+      update_config:
+        order: start-first
+  traefik:
+    image: traefik
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/opt/traefik/codejointraefik.yaml:/etc/traefik/traefik.yaml:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.devproxy.rule=Host(`*.dev.codejoin.roshananand.cloud`)"
+      - "traefik.http.routers.devproxy.entrypoints=web"
+      - "traefik.http.services.devproxy.loadbalancer.server.port=80"
+    networks:
+      - codejoin_net
+      - proxy_net
+    deploy:
+      update_config:
+        order: start-first
+
+networks:
+  proxy_net:
+    external: true
+  codejoin_net:
+    external: true

@@ -17,12 +17,11 @@ export const langExt: Record<string, string> = {
 
 export const projects: Project[] = [
   {
-    title: "Node.js",
+    title: "NodeJS",
     description:
       "Nodejs is an open-source, cross-platform, back-end JavaScript runtime environment.",
     icon: FaNodeJs,
     type: "Language",
-    image: "nodeboiler",
     runCmd: "node src/index.js",
   },
   {
@@ -31,7 +30,6 @@ export const projects: Project[] = [
       "Go is an open-source programming language that makes it easy to build simple, reliable, and efficient software.",
     icon: FaGolang,
     type: "Language",
-    image: "goboiler",
     runCmd: "go run cmd/main.go",
   },
   {
@@ -40,7 +38,6 @@ export const projects: Project[] = [
       "ReactJS is a JavaScript library for building user interfaces, particularly single-page applications where you can create reusable UI components.",
     icon: FaReact,
     type: "Website",
-    image: "reactboiler",
     runCmd: "npm run dev",
   },
 ];

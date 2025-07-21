@@ -7,7 +7,7 @@ const Header = () => {
   return (
     <header className="px-3 py-2 flex items-center justify-between">
       <h1 className="text-accent-300">CODE JOIN.</h1>
-      <div className="w-[8vh] overflow-hidden min-w-[60px] bg-accent-300 rounded-full relative">
+      <div className="w-[6vh] overflow-hidden min-w-[60px] bg-accent-300 rounded-full relative">
         {profile ? (
           <img
             src={`${profile}`}

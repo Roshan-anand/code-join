@@ -25,7 +25,6 @@ export const useAuth = () => {
             email: user.emails[0].value,
           })
         );
-        console.log("navigate useAuth");
         navigate("/home/dashboard");
       } catch (err) {
         if (isAxiosError(err)) {

@@ -1,0 +1,27 @@
+# this traefik configuration is for local test only
+# do not use it in production
+# it uses self-signed certificates and insecure API dashboard
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+log:
+  level: DEBUG
+
+entryPoints:
+  web:
+    address: ":80"
+
+  websecure:
+    address: ":443"
+
+api:
+  dashboard: true
+  insecure: true
+
+providers:
+  docker:
+    watch: true
+    endpoint: "unix:///var/run/docker.sock"
+    network: codejoin_net
+    defaultRule: "Host(`{{ normalize .ID }}.dev.local`)"

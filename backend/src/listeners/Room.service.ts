@@ -9,14 +9,14 @@ import crypto from "crypto";
 
 const RoomOperations = (socket: Socket) => {
   //event to create a room
-  socket.on("create-room", async ({ name, profile, image }) => {
+  socket.on("create-room", async ({ name, profile, title }) => {
     //generate a random room id using crypto
     const roomID = crypto.randomBytes(8).toString("hex");
 
     if (rooms.has(roomID)) {
       socket.emit("error", "Room already exists");
     } else {
-      const { containerID } = await createContainer(image);
+      const { containerID } = await createContainer(title, roomID);
       //if container is not created then emit error
       if (!containerID) {
         socket.emit("error", "Error while creating the environment");
@@ -30,14 +30,14 @@ const RoomOperations = (socket: Socket) => {
         members: new Map(),
       });
 
-      runNonInteractiveCmd(socket, roomID, true);
+      runNonInteractiveCmd(roomID, true);
       createNewStream(socket, roomID);
 
       rooms
         .get(roomID)!
         .members.set(socket.id, { name, profile, currFile: null });
       socket.join(roomID);
-      socket.emit("room-created", roomID);
+      socket.emit("room-created", { roomID, containerID });
     }
   });
 
@@ -50,7 +50,7 @@ const RoomOperations = (socket: Socket) => {
       socket.join(roomID);
       socket.emit("room-joined", roomID);
 
-      runNonInteractiveCmd(socket, roomID, true);
+      runNonInteractiveCmd(roomID, true);
     } else {
       socket.emit("error", "Room does not exist");
     }

@@ -12,7 +12,7 @@ const RoomTestOperation = (socket: Socket) => {
       socket.join(roomID);
       socket.emit("room-joined", roomID);
 
-      runNonInteractiveCmd(socket, roomID, true);
+      runNonInteractiveCmd(roomID, true);
     } else {
       socket.emit("error", "Room does not exist");
     }

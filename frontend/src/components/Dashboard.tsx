@@ -20,6 +20,7 @@ const Dashboard = () => {
 
   const [isLoading, setisLoading] = useState(false);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
+  const [search, setSearch] = useState("");
 
   //to check if user is authenticated
   useEffect(() => {
@@ -55,22 +56,28 @@ const Dashboard = () => {
         <section className="flex-1 flex px-2 gap-2 ">
           <figure className="flex-1 flex flex-col gap-2 items-center px-4 py-2">
             {projects.map((data) => {
-              return (
-                <button
-                  key={data.title}
-                  className="w-full rounded-lg bg-soft flex items-center gap-2 p-2"
-                  onClick={() => setCurrentProject(data)}
-                >
-                  {createElement(data.icon, { className: "icon-md" })}
-                  <h3 className="text-text">{data.title}</h3>
-                </button>
-              );
+              if (data.title.toLowerCase().includes(search.toLocaleLowerCase()))
+                return (
+                  <button
+                    key={data.title}
+                    className="w-full rounded-lg bg-soft flex items-center gap-2 p-2"
+                    onClick={() => setCurrentProject(data)}
+                  >
+                    {createElement(data.icon, { className: "icon-md" })}
+                    <h3 className="text-text">{data.title}</h3>
+                  </button>
+                );
             })}
           </figure>
           <div className="w-[2px] border-4 border-soft"></div>
           <div className="flex flex-col items-end w-[70%] gap-2 py-2">
             <figure className="border-2 border-accent-600 flex items-center w-1/2 py-1 rounded-md px-2">
-              <input type="text" className="grow outline-0" />
+              <input
+                type="text"
+                className="grow outline-0"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
               <FaSearch className="text-accent-600" />
             </figure>
 
@@ -93,7 +100,7 @@ const Dashboard = () => {
                         className="flex items-center gap-2 rounded-md bg-accent-500 px-2"
                         onClick={() => {
                           dispatch(setRunCmd(currentProject.runCmd));
-                          createRoom(currentProject.image);
+                          createRoom(currentProject.title);
                         }}
                       >
                         <MdAdd />

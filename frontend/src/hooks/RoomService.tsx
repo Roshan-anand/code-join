@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import { ReduxState } from "../providers/redux/store";
 import { useEffect } from "react";
-import { setRoomID } from "../providers/redux/slices/room";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { setFolderStructure } from "../providers/redux/slices/file";
 import { useWsContext } from "../providers/context/config";
+import { setRoomInfo } from "@/providers/redux/slices/room";
 
 const useRoomServices = (
   setisLoading: React.Dispatch<React.SetStateAction<boolean>>
@@ -24,14 +24,14 @@ const useRoomServices = (
     if (!socket) return;
     if (socket.hasListeners("room-created")) return;
     //listen room-created event
-    socket.on("room-created", (roomID: string) => {
-      dispatch(setRoomID(roomID));
+    socket.on("room-created", ({ roomID, containerID }) => {
+      dispatch(setRoomInfo({ roomID, devUrl: containerID }));
       navigate("/home/sandbox");
     });
 
     //listen room-joined event
-    socket.on("room-joined", (roomID: string) => {
-      dispatch(setRoomID(roomID));
+    socket.on("room-joined", ({ roomID, containerID }) => {
+      dispatch(setRoomInfo({ roomID, devUrl: containerID }));
       navigate("/home/sandbox");
     });
 
@@ -61,11 +61,11 @@ const useRoomServices = (
   };
 
   //to create a room
-  const createRoom = (image: string) => {
+  const createRoom = (title: string) => {
     socket?.emit("create-room", {
       name: userName,
       profile,
-      image,
+      title,
     });
   };
 

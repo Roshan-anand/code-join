@@ -14,7 +14,7 @@ app.use(express.json());
 //CORS configuration
 app.use(
   cors({
-    origin: process.env.EXTERNAL_FRONTEND_URL,
+    origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })

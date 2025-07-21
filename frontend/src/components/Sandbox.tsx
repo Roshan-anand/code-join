@@ -5,7 +5,7 @@ import Terminal from "../components/HomeComponents/Terminal";
 import SideBar from "../components/HomeComponents/SideBar";
 import useResizeable from "../hooks/Resize";
 import CodeEditor from "../components/HomeComponents/CodeEditor";
-// import CodeEditorTest from "../components/HomeComponents/CodeEditor_test";
+// import CodeEditorTest from "./HomeComponents/CodeEditor.test";
 
 const Sandbox = () => {
   const { editorWidth } = useSelector((state: ReduxState) => state.editor);

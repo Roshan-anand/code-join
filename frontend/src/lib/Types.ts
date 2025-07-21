@@ -12,7 +12,6 @@ export type Project = {
   title: string;
   description: string;
   icon: IconType;
-  image: string;
   type: "Language" | "Website";
   runCmd: string;
 };

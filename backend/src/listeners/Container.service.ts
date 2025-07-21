@@ -1,19 +1,27 @@
 import docker from "../configs/Docker";
-import { languages } from "../helpers/PrgLang";
 import { getIO, rooms } from "../configs/Socket";
 import { Socket } from "socket.io";
 import { langKey } from "../helpers/Types";
+import { projects } from "../helpers/PrgLang";
 
 //funtion to create a container
-export const createContainer = async (image: langKey) => {
+export const createContainer = async (title: langKey, roomID: string) => {
   try {
     // Creating a container with proper command array
     let container = await docker.createContainer({
-      Image: image,
+      Image: projects[title].image,
       AttachStdin: true,
       AttachStdout: true,
       Tty: true,
       WorkingDir: "/app",
+      Labels: {
+        "traefik.enable": "true",
+        [`traefik.http.services.${roomID}.loadbalancer.server.port`]:
+          projects[title].port,
+      },
+      HostConfig: {
+        NetworkMode: "codejoin_net",
+      },
     });
 
     await container.start();
@@ -26,7 +34,6 @@ export const createContainer = async (image: langKey) => {
 
 //function to run non interactive commands
 export const runNonInteractiveCmd = async (
-  socket: Socket,
   roomID: string,
   send: boolean,
   cmd?: string
@@ -62,7 +69,7 @@ export const runNonInteractiveCmd = async (
     stream.end();
   }
 
-  // // test
+  // test
   // if (rooms.get(roomID)!.streams.length === 0) createNewStream(socket, roomID);
 };
 

@@ -25,7 +25,7 @@ let io: SocketServer;
 export const initSocket = (server: HttpServer) => {
   io = new SocketServer(server, {
     cors: {
-      origin: process.env.EXTERNAL_FRONTEND_URL,
+      origin: process.env.FRONTEND_URL,
       credentials: true,
     },
   });
@@ -45,9 +45,9 @@ export const initSocket = (server: HttpServer) => {
           room.members.delete(socket.id);
           if (room.members.size === 0) {
             // test
-            rooms.get(roomID)!.streams = [];
-            // StopContainer(room.containerID);
-            // rooms.delete(roomID);
+            // rooms.get(roomID)!.streams = [];
+            StopContainer(room.containerID);
+            rooms.delete(roomID);
           }
           console.log("User disconnected");
           break;
