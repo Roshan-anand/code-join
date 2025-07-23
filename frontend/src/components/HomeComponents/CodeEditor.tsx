@@ -5,12 +5,10 @@ import { FaCode, FaLaptopCode, FaPlay } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { ReduxState } from "../../providers/redux/store";
 import { setActiveSection } from "../../providers/redux/slices/editor";
-import { useNavigate } from "react-router-dom";
 import useTerminalService from "../../hooks/TerminalService";
 import useEditorService from "../../hooks/EditorService";
 import { AiOutlineExport } from "react-icons/ai";
 const CodeEditor = () => {
-  const navigate = useNavigate();
   //global state from redux
   const dispatch = useDispatch();
   const { editorHeight, activeSection } = useSelector(
@@ -19,12 +17,7 @@ const CodeEditor = () => {
   const { editorLang, openedFile, runCmd, editorCode } = useSelector(
     (state: ReduxState) => state.file
   );
-  const { roomID ,devUrl} = useSelector((state: ReduxState) => state.room);
-
-  //redirect to dashboard if no roomID
-  useEffect(() => {
-    if (!roomID) navigate("/home/dashboard");
-  }, [roomID, navigate]);
+  const { devUrl } = useSelector((state: ReduxState) => state.room);
 
   // Set custom theme for monaco editor
   const monaco = useMonaco();
@@ -99,7 +92,7 @@ const CodeEditor = () => {
           <button className="mr-2" onClick={handleRunPrg}>
             <FaPlay className="icon-md" />
           </button>
-          <a href={devUrl!} target="_blank" >
+          <a href={devUrl!} target="_blank">
             <AiOutlineExport className="icon-md" />
           </a>
         </header>

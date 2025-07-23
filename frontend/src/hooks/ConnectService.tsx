@@ -6,11 +6,11 @@ export const ConnectSocket = () => {
   const { setsocket } = useWsContext();
 
   useEffect(() => {
-    const newSocket = io(import.meta.env.VITE_BACKEND_URL);
-    if (!newSocket) return;
-    setsocket(newSocket);
+    const ws = io(import.meta.env.VITE_BACKEND_URL);
+    if (!ws) return;
+    setsocket(ws);
     return () => {
-      newSocket.disconnect();
+      ws.disconnect();
     };
   }, [setsocket]);
 

@@ -19,5 +19,4 @@ FROM nginx:latest AS runner
 COPY  --from=builder /client/nginx.conf /etc/nginx
 COPY --from=builder /client/dist /usr/share/nginx/html
 
-EXPOSE 80
 CMD [ "nginx", "-g", "daemon off;" ]

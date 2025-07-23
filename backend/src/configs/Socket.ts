@@ -5,7 +5,6 @@ import { Room } from "../helpers/Types";
 import TerminalOperations from "../listeners/Terminal.service";
 import { StopContainer } from "../listeners/Container.service";
 import EditorOperations from "../listeners/Editor.service";
-import RoomTestOperation from "../listeners/Room_test.service";
 
 //global object to store rooms information
 export const rooms: Room = new Map([
@@ -36,23 +35,11 @@ export const initSocket = (server: HttpServer) => {
     RoomOperations(socket);
     TerminalOperations(socket);
     EditorOperations(socket);
-    RoomTestOperation(socket);
 
     //on user disconnect
     socket.on("disconnect", () => {
-      for (const [roomID, room] of rooms) {
-        if (room.members.has(socket.id)) {
-          room.members.delete(socket.id);
-          if (room.members.size === 0) {
-            // test
-            // rooms.get(roomID)!.streams = [];
-            StopContainer(room.containerID);
-            rooms.delete(roomID);
-          }
-          console.log("User disconnected");
-          break;
-        }
-      }
+      removeUserFromRoom(socket.id);
+      console.log("User disconnected");
     });
   });
 };
@@ -60,4 +47,20 @@ export const initSocket = (server: HttpServer) => {
 export const getIO = (): SocketServer => {
   if (!io) throw new Error("IO not initialized");
   return io;
+};
+
+export const removeUserFromRoom = (socketID: string) => {
+  for (const [roomID, room] of rooms) {
+    if (room.members.has(socketID)) {
+      room.members.delete(socketID);
+      if (room.members.size === 0) {
+        // test
+        // rooms.get(roomID)!.streams = [];
+        StopContainer(room.containerID);
+        rooms.delete(roomID);
+      }
+      console.log("User removeed from room");
+      break;
+    }
+  }
 };

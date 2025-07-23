@@ -13,7 +13,7 @@ export const createContainer = async (title: langKey, roomID: string) => {
       AttachStdin: true,
       AttachStdout: true,
       Tty: true,
-      WorkingDir: "/app",
+      WorkingDir: projects[title].dir,
       Labels: {
         "traefik.enable": "true",
         [`traefik.http.services.${roomID}.loadbalancer.server.port`]:
@@ -22,6 +22,7 @@ export const createContainer = async (title: langKey, roomID: string) => {
       HostConfig: {
         NetworkMode: "codejoin_net",
       },
+      Cmd: projects[title].cmd,
     });
 
     await container.start();
@@ -74,7 +75,7 @@ export const runNonInteractiveCmd = async (
 };
 
 //function to create a new stream for the terminal
-export const createNewStream = async (socket: Socket, roomID: string) => {
+export const createNewStream = async (roomID: string) => {
   const io = getIO();
   const container = docker.getContainer(rooms.get(roomID)?.containerID!);
 

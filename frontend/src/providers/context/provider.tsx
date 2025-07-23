@@ -8,8 +8,15 @@ const ContextProvider: React.FC<{
   const [socket, setsocket] = useState<Socket | null>(null);
   const [terminal, setTerminal] = useState<XTerminal | null>(null);
 
+  const disconnect = () => {
+    if (socket) {
+      socket.disconnect();
+      setsocket(null);
+      console.log("Socket disconnected");
+    }
+  };
   return (
-    <WsContext.Provider value={{ socket, setsocket, terminal, setTerminal }}>
+    <WsContext.Provider value={{ socket, setsocket, terminal, setTerminal, disconnect }}>
       {children}
     </WsContext.Provider>
   );

@@ -1,32 +1,41 @@
 services:
   server:
     user: "0:0"
-    image: codejoin-s:0.1.0
+    image: codejoin-s:0.1.5
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     env_file:
-      - ./backend/.env
+      - ./.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - proxy_net
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.server.rule=Host(`server.roshananand.cloud`)"
-      - "traefik.http.routers.server.entrypoints=websecure"
-      - "traefik.http.routers.server.tls.certresolver=letsencrypt"
-      - "traefik.http.services.server.loadbalancer.server.port=5000"
+      - "traefik.http.routers.cdserver.rule=Host(`cdserver.roshananand.cloud`)"
+      - "traefik.http.routers.cdserver.entrypoints=websecure"
+      - "traefik.http.routers.cdserver.tls.certresolver=letsencrypt"
+      - "traefik.http.services.cdserver.loadbalancer.server.port=5000"
     deploy:
       update_config:
         order: start-first
   client:
-    image: codejoin-c:0.1.0
+    image: codejoin-c:0.1.3
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_BACKEND_URL=https://cdserver.roshananand.cloud
+        - VITE_SUBDOMAIN=dev.codejoin.roshananand.cloud
     networks:
       - proxy_net
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.client.rule=Host(`codejoin.roshananand.cloud`)"
-      - "traefik.http.routers.client.entrypoints=websecure"
-      - "traefik.http.routers.client.tls.certresolver=letsencrypt"
-      - "traefik.http.services.client.loadbalancer.server.port=80"
+      - "traefik.http.routers.cdclient.rule=Host(`codejoin.roshananand.cloud`)"
+      - "traefik.http.routers.cdclient.entrypoints=websecure"
+      - "traefik.http.routers.cdclient.tls.certresolver=letsencrypt"
+      - "traefik.http.services.cdclient.loadbalancer.server.port=80"
     deploy:
       update_config:
         order: start-first
@@ -34,7 +43,7 @@ services:
     image: traefik
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /etc/opt/traefik/codejointraefik.yaml:/etc/traefik/traefik.yaml:ro
+      - /etc/opt/traefik/codejoin/traefik.yaml:/etc/traefik/traefik.yaml:ro
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.devproxy.rule=Host(`*.dev.codejoin.roshananand.cloud`)"

@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import { rooms } from "../configs/Socket";
+import { removeUserFromRoom, rooms } from "../configs/Socket";
 import {
   createContainer,
   createNewStream,
@@ -31,7 +31,7 @@ const RoomOperations = (socket: Socket) => {
       });
 
       runNonInteractiveCmd(roomID, true);
-      createNewStream(socket, roomID);
+      createNewStream(roomID);
 
       rooms
         .get(roomID)!
@@ -54,6 +54,11 @@ const RoomOperations = (socket: Socket) => {
     } else {
       socket.emit("error", "Room does not exist");
     }
+  });
+
+  //event to leave the sandbox
+  socket.on("leave-sandbox", () => {
+    removeUserFromRoom(socket.id);
   });
 };
 

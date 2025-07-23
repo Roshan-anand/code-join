@@ -1,65 +1,35 @@
 services:
-  client:
-    image: codejoindev-c
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
-    environment:
-      - VITE_BACKEND_URL=http://localhost:5000
-    develop:
-      watch:
-        - action: sync
-          path: ./frontend/src
-          target: /client/src
-          ignore:
-            - .git
-            - node_modules
-        - action: rebuild
-          path: ./frontend/package.json
-          target: /client/package.json
-          ignore:
-            - .git
-            - node_modules
-    ports:
-      - "5173:5173"
-    networks:
-      - codejoin_net
-
   server:
-    user: "0:0"  
-    image: codejoindev-s
+    user: "0:0"
+    image: codejoin-s
     build:
       context: ./backend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     env_file:
       - ./backend/.env
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    develop:
-      watch:
-        - action: sync
-          path: ./backend/src
-          target: /server/src
-          ignore:
-            - .git
-            - node_modules
-        - action: rebuild
-          path: ./backend/package.json
-          target: /server/package.json
-          ignore:
-            - .git
-            - node_modules
     ports:
       - "5000:5000"
-    networks:
-      - codejoin_net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
+  client:
+    image: codejoin-c
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_BACKEND_URL=http://localhost:5000
+        - VITE_SUBDOMAIN=dev.codejoin.roshananand.cloud
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
   traefik:
     image: traefik
     ports:
       - "80:80"
       - "443:443"
-      - "8001:8080"
+      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.yaml:/etc/traefik/traefik.yaml:ro

@@ -44,8 +44,8 @@ const Dashboard = () => {
     <main className="mt-20 h-[90%] flex flex-col items-center">
       <div className="bg-secondary w-2/3 h-[35vh] md:size-[800px] rounded-lg overflow-hidden  flex flex-col">
         {isLoading && (
-          <div className="dashboard-loader">
-            <RiLoaderFill className="size-[100px] text-accent-500 animate-spin mx-auto" />
+          <div className="absolute top-0 left-0 backdrop-blur-[2px] bg-white/5 size-full flex justify-center items-center">
+            <RiLoaderFill className="size-[100px] text-accent-500 animate-spin" />
           </div>
         )}
         <header className="p-3 bg-soft flex gap-5">

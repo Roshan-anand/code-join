@@ -1,14 +1,17 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { ReduxState } from "../providers/redux/store";
 import Terminal from "../components/HomeComponents/Terminal";
 import SideBar from "../components/HomeComponents/SideBar";
 import useResizeable from "../hooks/Resize";
 import CodeEditor from "../components/HomeComponents/CodeEditor";
+import { useNavigate } from "react-router-dom";
 // import CodeEditorTest from "./HomeComponents/CodeEditor.test";
 
 const Sandbox = () => {
+  const navigate = useNavigate();
   const { editorWidth } = useSelector((state: ReduxState) => state.editor);
+  const { roomID } = useSelector((state: ReduxState) => state.room);
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -18,6 +21,11 @@ const Sandbox = () => {
     setWindowWidth,
     containerRef,
   });
+
+  // access to sanbox only if roomID is present
+  useEffect(() => {
+    if (!roomID) navigate("/home/dashboard");
+  }, [roomID, navigate]);
 
   return (
     <main

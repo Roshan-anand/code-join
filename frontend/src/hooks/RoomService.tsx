@@ -57,11 +57,13 @@ const useRoomServices = (
 
   //to join a room
   const joinRoom = (roomID: string) => {
+    setisLoading(true);
     socket?.emit("join-room", { roomID, name: userName, profile });
   };
 
   //to create a room
   const createRoom = (title: string) => {
+    setisLoading(true);
     socket?.emit("create-room", {
       name: userName,
       profile,

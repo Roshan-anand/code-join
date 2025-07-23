@@ -4,6 +4,8 @@ export type langKey = "NodeJS" | "GOlang" | "ReactJS";
 
 export type ProjectInfo = {
   image: string;
+  dir: string;
+  cmd: string[];
   port: string;
 };
 
@@ -13,6 +15,9 @@ export type Room = Map<
   {
     containerID: string;
     streams: internal.Duplex[];
-    members: Map<string, { name: string; profile: string; currFile: string|null }>;
+    members: Map<
+      string,
+      { name: string; profile: string; currFile: string | null }
+    >;
   }
 >;

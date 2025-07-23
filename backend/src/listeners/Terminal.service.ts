@@ -15,13 +15,13 @@ const TerminalOperations = (socket: Socket) => {
     // const fileCmdRegex = /\b(?:touch|mkdir|rmdir|rm|cp|mv|npm)\b/i;
     if (key == "\r") {
       //   if (fileCmdRegex.test(streamCmd))
-      runNonInteractiveCmd(socket, roomID, true);
+      runNonInteractiveCmd(roomID, true);
       // streamCmd = "";
     }
   });
 
   socket.on("stream-run", ({ cmd, roomID, send }) => {
-    runNonInteractiveCmd(socket, roomID, send, cmd);
+    runNonInteractiveCmd(roomID, send, cmd);
   });
 };
 
