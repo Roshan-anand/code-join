@@ -24,8 +24,8 @@ const useRoomServices = (
     if (!socket) return;
     if (socket.hasListeners("room-created")) return;
     //listen room-created event
-    socket.on("room-created", ({ roomID, containerID }) => {
-      dispatch(setRoomInfo({ roomID, devUrl: containerID }));
+    socket.on("room-created", (roomID) => {
+      dispatch(setRoomInfo(roomID));
       navigate("/home/sandbox");
     });
 

@@ -37,7 +37,7 @@ const RoomOperations = (socket: Socket) => {
         .get(roomID)!
         .members.set(socket.id, { name, profile, currFile: null });
       socket.join(roomID);
-      socket.emit("room-created", { roomID, containerID });
+      socket.emit("room-created", roomID);
     }
   });
 

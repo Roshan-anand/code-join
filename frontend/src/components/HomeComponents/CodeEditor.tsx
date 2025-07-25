@@ -17,7 +17,7 @@ const CodeEditor = () => {
   const { editorLang, openedFile, runCmd, editorCode } = useSelector(
     (state: ReduxState) => state.file
   );
-  const { devUrl } = useSelector((state: ReduxState) => state.room);
+  const { roomID } = useSelector((state: ReduxState) => state.room);
 
   // Set custom theme for monaco editor
   const monaco = useMonaco();
@@ -92,7 +92,10 @@ const CodeEditor = () => {
           <button className="mr-2" onClick={handleRunPrg}>
             <FaPlay className="icon-md" />
           </button>
-          <a href={devUrl!} target="_blank">
+          <a
+            href={`https://${roomID}.${import.meta.env.VITE_SUBDOMAIN}`}
+            target="_blank"
+          >
             <AiOutlineExport className="icon-md" />
           </a>
         </header>

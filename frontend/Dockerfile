@@ -3,7 +3,9 @@ FROM node:24-alpine AS builder
 WORKDIR /client
 
 ARG VITE_BACKEND_URL
+ARG VITE_SUBDOMAIN
 ENV VITE_BACKEND_URL=$VITE_BACKEND_URL
+ENV VITE_SUBDOMAIN=$VITE_SUBDOMAIN
 
 COPY package.json package.json
 COPY pnpm-lock.yaml pnpm-lock.yaml

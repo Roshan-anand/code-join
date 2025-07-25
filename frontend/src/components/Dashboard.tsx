@@ -1,10 +1,8 @@
 import { FaSearch, FaToolbox } from "react-icons/fa";
 import { projects } from "../lib/languages";
-import { createElement, useEffect, useRef, useState } from "react";
+import { createElement, useRef, useState } from "react";
 import { RiLoaderFill } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { ReduxState } from "../providers/redux/store";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import useRoomServices from "../hooks/RoomService";
 import { Project } from "@/lib/Types";
@@ -12,20 +10,11 @@ import { MdAdd } from "react-icons/md";
 import { setRunCmd } from "@/providers/redux/slices/file";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  //global state from redux
-  const { email } = useSelector((state: ReduxState) => state.room);
 
   const [isLoading, setisLoading] = useState(false);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [search, setSearch] = useState("");
-
-  //to check if user is authenticated
-  useEffect(() => {
-    if (!email) navigate("/");
-  }, [email, navigate]);
 
   const { createRoom, joinRoom } = useRoomServices(setisLoading); //hook to listen to room events
 

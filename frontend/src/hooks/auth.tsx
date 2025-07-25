@@ -20,9 +20,9 @@ export const useAuth = () => {
         const user = res.data.user;
         dispatch(
           setBasicDetails({
-            name: user.displayName,
-            profile: user.photos[0].value,
-            email: user.emails[0].value,
+            name: user.name,
+            profile: user.pic,
+            email: user.email,
           })
         );
         navigate("/home/dashboard");
@@ -30,6 +30,7 @@ export const useAuth = () => {
         if (isAxiosError(err)) {
           console.log(err.message);
         }
+        navigate("/login");
       }
     };
     isAuth();

@@ -3,15 +3,16 @@ import { ConnectSocket } from "../hooks/ConnectService";
 import { Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useWsContext } from "@/providers/context/config";
+import { useAuth } from "@/hooks/auth";
 
 const Home = () => {
+  useAuth();
   ConnectSocket();
   const loc = useLocation();
   const { socket } = useWsContext();
   useEffect(() => {
     return () => {
       if (loc.pathname == "/home/sandbox") {
-        console.log("user left sandbox");
         socket?.emit("leave-sandbox");
       }
     };

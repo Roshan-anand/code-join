@@ -9,6 +9,7 @@ export const createContainer = async (title: langKey, roomID: string) => {
   try {
     // Creating a container with proper command array
     let container = await docker.createContainer({
+      name: roomID,
       Image: projects[title].image,
       AttachStdin: true,
       AttachStdout: true,
@@ -16,6 +17,8 @@ export const createContainer = async (title: langKey, roomID: string) => {
       WorkingDir: projects[title].dir,
       Labels: {
         "traefik.enable": "true",
+        "traefik.constraint-label": "codejoin-dev",
+        "traefik.http.routers.devproxy.entrypoints": "web",
         [`traefik.http.services.${roomID}.loadbalancer.server.port`]:
           projects[title].port,
       },

@@ -19,9 +19,9 @@ services:
       dockerfile: Dockerfile
       args:
         - VITE_BACKEND_URL=http://localhost:5000
-        - VITE_SUBDOMAIN=dev.codejoin.roshananand.cloud
+        - VITE_SUBDOMAIN=dev.localhost
     ports:
-      - "5173:5173"
+      - "5173:80"
     depends_on:
       - server
   traefik:
