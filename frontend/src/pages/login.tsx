@@ -4,6 +4,7 @@ import { FaCode } from "react-icons/fa";
 import { createElement, useRef } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 type ProviderProps = {
   name: string;
@@ -106,13 +107,14 @@ const Login = () => {
             />
             <label className="user-label">Email</label>
           </div>
-          <button
+          <Button
+            variant={"accent"}
             type="submit"
-            className="bg-accent-500 hover:bg-accent-600 text-white py-2 rounded-md mt-4"
+            className="mt-4"
             onClick={loginHandler}
           >
             Sign Up
-          </button>
+          </Button>
         </section>
       </main>
     </div>

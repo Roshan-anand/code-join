@@ -1,14 +1,12 @@
-import { useNavigate } from "react-router-dom";
+import { HeroHeader } from "@/components/landing/header";
+import HeroSection from "@/components/landing/hero";
 
 const Landing = () => {
-  const navigate = useNavigate();
   return (
-    <>
-      <header></header>
-      <main className="w-2/3 h-2/3 mx-auto mt-10">
-        <button onClick={() => navigate("/login")}>login</button>
-      </main>
-    </>
+    <div className="max-w-7xl mx-auto relative">
+      <HeroHeader />
+      <HeroSection />
+    </div>
   );
 };
 

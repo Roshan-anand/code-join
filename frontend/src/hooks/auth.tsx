@@ -1,14 +1,17 @@
 import axios, { isAxiosError } from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setBasicDetails } from "../providers/redux/slices/room";
 import { useEffect } from "react";
+import { ReduxState } from "@/providers/redux/store";
 
 export const useAuth = () => {
+  const { email } = useSelector((state: ReduxState) => state.room);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
     const isAuth = async () => {
+      if (email) return;
       try {
         const res = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/auth/user`,
@@ -34,5 +37,5 @@ export const useAuth = () => {
       }
     };
     isAuth();
-  }, [dispatch, navigate]);
+  }, [dispatch, navigate, email]);
 };

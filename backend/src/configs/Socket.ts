@@ -7,17 +7,7 @@ import { StopContainer } from "../listeners/Container.service";
 import EditorOperations from "../listeners/Editor.service";
 
 //global object to store rooms information
-export const rooms: Room = new Map([
-  [
-    "123",
-    {
-      containerID:
-        "f381a21b1f5b1232a23524987b088802e75cadcf661b8f06621850666b701885",
-      streams: [],
-      members: new Map(),
-    },
-  ],
-]);
+export const rooms: Room = new Map([]);
 
 //to initilize socket
 let io: SocketServer;

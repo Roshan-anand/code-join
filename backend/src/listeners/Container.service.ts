@@ -3,9 +3,12 @@ import { getIO, rooms } from "../configs/Socket";
 import { Socket } from "socket.io";
 import { langKey } from "../helpers/Types";
 import { projects } from "../helpers/PrgLang";
-
+import internal from "stream";
 //funtion to create a container
-export const createContainer = async (title: langKey, roomID: string) => {
+export const createContainer = async (
+  title: langKey,
+  roomID: string
+): Promise<{ containerID?: string; stream?: internal.Duplex }> => {
   try {
     // Creating a container with proper command array
     let container = await docker.createContainer({
@@ -18,7 +21,7 @@ export const createContainer = async (title: langKey, roomID: string) => {
       Labels: {
         "traefik.enable": "true",
         "traefik.constraint-label": "codejoin-dev",
-        "traefik.http.routers.devproxy.entrypoints": "web",
+        [`traefik.http.routers.${roomID}.entrypoints`]: "web",
         [`traefik.http.services.${roomID}.loadbalancer.server.port`]:
           projects[title].port,
       },
@@ -29,7 +32,22 @@ export const createContainer = async (title: langKey, roomID: string) => {
     });
 
     await container.start();
-    return { containerID: container.id };
+
+    // to create new stream for the project
+    const io = getIO();
+    const exec1 = await container.exec({
+      Cmd: ["bash"],
+      AttachStdout: true,
+      AttachStderr: true,
+      AttachStdin: true,
+      Tty: true,
+    });
+    const stream = await exec1.start({ hijack: true, stdin: true });
+    stream.on("data", (data) => {
+      io.to(roomID).emit("terminal-output", data.slice(8).toString());
+    });
+
+    return { containerID: container.id, stream };
   } catch (err) {
     console.error("Error creating container:", err);
     return {};
@@ -72,29 +90,6 @@ export const runNonInteractiveCmd = async (
     const stream = await exec.start({ hijack: true });
     stream.end();
   }
-
-  // test
-  // if (rooms.get(roomID)!.streams.length === 0) createNewStream(socket, roomID);
-};
-
-//function to create a new stream for the terminal
-export const createNewStream = async (roomID: string) => {
-  const io = getIO();
-  const container = docker.getContainer(rooms.get(roomID)?.containerID!);
-
-  const exec1 = await container.exec({
-    Cmd: ["bash"],
-    AttachStdout: true,
-    AttachStderr: true,
-    AttachStdin: true,
-    Tty: true,
-  });
-
-  const stream = await exec1.start({ hijack: true, stdin: true });
-  stream.on("data", (data) => {
-    io.to(roomID).emit("terminal-output", data.slice(8).toString());
-  });
-  rooms.get(roomID)!.streams.push(stream);
 };
 
 export const GetFileCode = async (

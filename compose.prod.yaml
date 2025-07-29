@@ -1,7 +1,7 @@
 services:
   server:
     user: "0:0"
-    image: codejoin-s:0.1.8
+    image: codejoin-s:0.1.11
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -15,14 +15,14 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.cdserver.rule=Host(`cdserver.roshananand.cloud`)"
       - "traefik.http.routers.cdserver.entrypoints=websecure"
-      - "traefik.http.routers.cdserver.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.cdserver.tls.certresolver=cloudflare"
       - "traefik.http.services.cdserver.loadbalancer.server.port=5000"
       - "traefik.constraint-label=head-proxy"
     deploy:
       update_config:
         order: start-first
   client:
-    image: codejoin-c:0.1.8
+    image: codejoin-c:0.1.10
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -35,7 +35,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.cdclient.rule=Host(`codejoin.roshananand.cloud`)"
       - "traefik.http.routers.cdclient.entrypoints=websecure"
-      - "traefik.http.routers.cdclient.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.cdclient.tls.certresolver=cloudflare"
       - "traefik.http.services.cdclient.loadbalancer.server.port=80"
       - "traefik.constraint-label=head-proxy"
     deploy:
@@ -46,13 +46,14 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/opt/traefik/codejoin/traefik.yaml:/etc/traefik/traefik.yaml:ro
-      - /etc/opt/traefik/codejoin/acme.json:/acme.json
+      # - /etc/opt/traefik/proxy/acme.json:/acme.json
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.devproxy.rule=HostRegexp(`^[a-z0-9-]+\\.dev\\.codejoin\\.roshananand\\.cloud$$`)"
       - "traefik.http.routers.devproxy.entrypoints=websecure"
-      - "traefik.http.routers.devproxy.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.devproxy.tls.certresolver=cloudflare"
       - "traefik.http.routers.devproxy.tls.domains[0].main=*.dev.codejoin.roshananand.cloud"
+      # - "traefik.http.services.devproxy.loadbalancer.server.scheme=http"
       - "traefik.http.services.devproxy.loadbalancer.server.port=80"
       - "traefik.constraint-label=head-proxy"
     networks:

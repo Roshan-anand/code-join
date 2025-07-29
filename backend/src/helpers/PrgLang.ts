@@ -18,6 +18,6 @@ export const projects: Record<langKey, ProjectInfo> = {
     image: "nodeboiler",
     port: "5173",
     dir: "/app",
-    cmd: ["bash", "-c", "rm -rf ../server && bash"],
+    cmd: ["bash", "-c", "rm -rf ../server && npm i && bash"],
   },
 };

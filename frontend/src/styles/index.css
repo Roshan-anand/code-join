@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 @theme {
   --color-primary: #040406;
@@ -68,53 +69,4 @@ p {
 .icon-md-soft {
   font-size: clamp(1.5rem, 3vw, 2rem);
   color: var(--color-accent-700);
-}
-
-/* gradient color option */
-.bg-gradient-one {
-  background: linear-gradient(108.94deg, #16093B 18.43%, #221228 52.22%);
-}
-
-.bg-gradient-two {
-  background: linear-gradient(97.9deg, rgba(24, 0, 77, 0.4) 5.96%, rgba(104, 3, 88, 0.4) 81.62%, rgba(9, 251, 251, 0.4) 95.18%), linear-gradient(59.12deg, #2C0A5C 45.19%, #5E084D 68.24%);
-}
-
-.bg-gradient-three {
-  background: linear-gradient(245.93deg, rgba(209, 21, 111, 0.16) 0%, rgba(209, 25, 80, 0) 36.63%),
-    linear-gradient(186.67deg, rgba(56, 0, 169, 0.2) 17.55%, rgba(56, 0, 169, 0.2) 21.02%, rgba(58, 19, 255, 0) 91.62%),
-    #13111C;
-}
-
-.resize-btn {
-  border-radius: 20px;
-
-  &:hover {
-    background-color: var(--color-accent-700);
-  }
-
-  &::after {
-    content: " ";
-    display: block;
-    margin: 0 auto;
-    border-radius: 20px;
-    background-color: var(--color-accent-700);
-  }
-}
-
-.file-txt {
-  font-size: clamp(0.75rem, 1.5vw, 1rem);
-  font-weight: 400;
-  position: relative;
-  margin: 2px 0;
-
-  &:hover {
-    &::after {
-      content: " ";
-      width: 150%;
-      position: absolute;
-      top: 0;
-      left: -40%;
-      background-color: rgba(255, 255, 255, 0.125);
-    }
-  }
 }

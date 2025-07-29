@@ -7,8 +7,8 @@ import {
   setActiveSection,
   setEditorWidth,
 } from "../../providers/redux/slices/editor";
-import RoomOpt from "../SideBardComponents/RoomOpt";
-import FilesOpt from "../SideBardComponents/FilesOpt";
+import RoomOpt from "../sidebar/RoomOpt";
+import FilesOpt from "../sidebar/FilesOpt";
 import { setSideBarOpt } from "../../providers/redux/slices/file";
 
 const SideBar = () => {

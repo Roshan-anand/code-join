@@ -24,4 +24,5 @@ providers:
     watch: true
     endpoint: "unix:///var/run/docker.sock"
     network: codejoin_net
-    defaultRule: "Host(`{{ normalize .ID }}.dev.local`)"
+    defaultRule: "Host(`{{ normalize .Name }}.dev.localhost`)"
+    constraints: "Label(`traefik.constraint-label`, `codejoin-dev`)"

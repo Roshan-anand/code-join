@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { ReduxState } from "../providers/redux/store";
-import Terminal from "../components/HomeComponents/Terminal";
-import SideBar from "../components/HomeComponents/SideBar";
+import Terminal from "./home/Terminal";
+import SideBar from "./home/SideBar";
 import useResizeable from "../hooks/Resize";
-import CodeEditor from "../components/HomeComponents/CodeEditor";
+import CodeEditor from "./home/CodeEditor";
 import { useNavigate } from "react-router-dom";
 // import CodeEditorTest from "./HomeComponents/CodeEditor.test";
 

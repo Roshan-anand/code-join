@@ -1,10 +1,6 @@
 import { Socket } from "socket.io";
 import { removeUserFromRoom, rooms } from "../configs/Socket";
-import {
-  createContainer,
-  createNewStream,
-  runNonInteractiveCmd,
-} from "./Container.service";
+import { createContainer, runNonInteractiveCmd } from "./Container.service";
 import crypto from "crypto";
 
 const RoomOperations = (socket: Socket) => {
@@ -16,9 +12,9 @@ const RoomOperations = (socket: Socket) => {
     if (rooms.has(roomID)) {
       socket.emit("error", "Room already exists");
     } else {
-      const { containerID } = await createContainer(title, roomID);
+      const { containerID, stream } = await createContainer(title, roomID);
       //if container is not created then emit error
-      if (!containerID) {
+      if (!containerID || !stream) {
         socket.emit("error", "Error while creating the environment");
         return;
       }
@@ -26,16 +22,11 @@ const RoomOperations = (socket: Socket) => {
       //add a new room
       rooms.set(roomID, {
         containerID,
-        streams: [],
-        members: new Map(),
+        streams: stream,
+        members: new Map([[socket.id, { name, profile, currFile: null }]]),
       });
 
       runNonInteractiveCmd(roomID, true);
-      createNewStream(roomID);
-
-      rooms
-        .get(roomID)!
-        .members.set(socket.id, { name, profile, currFile: null });
       socket.join(roomID);
       socket.emit("room-created", roomID);
     }

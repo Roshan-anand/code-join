@@ -30,8 +30,8 @@ const useRoomServices = (
     });
 
     //listen room-joined event
-    socket.on("room-joined", ({ roomID, containerID }) => {
-      dispatch(setRoomInfo({ roomID, devUrl: containerID }));
+    socket.on("room-joined", (roomID) => {
+      dispatch(setRoomInfo(roomID));
       navigate("/home/sandbox");
     });
 

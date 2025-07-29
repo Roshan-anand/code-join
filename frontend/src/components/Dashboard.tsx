@@ -8,6 +8,7 @@ import useRoomServices from "../hooks/RoomService";
 import { Project } from "@/lib/Types";
 import { MdAdd } from "react-icons/md";
 import { setRunCmd } from "@/providers/redux/slices/file";
+import { Button } from "./ui/button";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -47,14 +48,15 @@ const Dashboard = () => {
             {projects.map((data) => {
               if (data.title.toLowerCase().includes(search.toLocaleLowerCase()))
                 return (
-                  <button
+                  <Button
+                    variant={"soft"}
                     key={data.title}
-                    className="w-full rounded-lg bg-soft flex items-center gap-2 p-2"
+                    className="justify-start w-full"
                     onClick={() => setCurrentProject(data)}
                   >
                     {createElement(data.icon, { className: "icon-md" })}
                     <h3 className="text-text">{data.title}</h3>
-                  </button>
+                  </Button>
                 );
             })}
           </figure>
@@ -85,8 +87,9 @@ const Dashboard = () => {
                   <section className="p-3">
                     <p>{currentProject.description}</p>
                     <div className="flex justify-end">
-                      <button
-                        className="flex items-center gap-2 rounded-md bg-accent-500 px-2"
+                      <Button
+                        variant={"accent"}
+                        className="py-1"
                         onClick={() => {
                           dispatch(setRunCmd(currentProject.runCmd));
                           createRoom(currentProject.title);
@@ -94,7 +97,7 @@ const Dashboard = () => {
                       >
                         <MdAdd />
                         <h3>create</h3>
-                      </button>
+                      </Button>
                     </div>
                   </section>
                 </>
@@ -109,12 +112,9 @@ const Dashboard = () => {
                 ref={idInput}
                 placeholder="roomID123"
               />
-              <button
-                className="p-2 bg-accent-500 rounded-lg"
-                onClick={handleJoinRoom}
-              >
+              <Button variant={"accent"} onClick={handleJoinRoom}>
                 <h3>Join Room</h3>
-              </button>
+              </Button>
             </figure>
           </div>
         </section>

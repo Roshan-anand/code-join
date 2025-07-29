@@ -1,4 +1,4 @@
-import Header from "@/components/HomeComponents/Header";
+import Header from "@/components/home/Header";
 import { ConnectSocket } from "../hooks/ConnectService";
 import { Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
@@ -12,9 +12,7 @@ const Home = () => {
   const { socket } = useWsContext();
   useEffect(() => {
     return () => {
-      if (loc.pathname == "/home/sandbox") {
-        socket?.emit("leave-sandbox");
-      }
+      if (loc.pathname == "/home/sandbox") socket?.emit("leave-sandbox");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loc]);

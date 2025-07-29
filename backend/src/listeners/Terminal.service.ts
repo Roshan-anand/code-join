@@ -9,7 +9,8 @@ const TerminalOperations = (socket: Socket) => {
     // if (key === "\u007F") {
     //   streamCmd = streamCmd.slice(0, -1);
     // } else streamCmd += key;
-    const stream = rooms.get(roomID)!.streams[0];
+    const stream = rooms.get(roomID)?.streams;
+    if (!stream) return;
     stream.write(key);
 
     // const fileCmdRegex = /\b(?:touch|mkdir|rmdir|rm|cp|mv|npm)\b/i;

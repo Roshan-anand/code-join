@@ -8,7 +8,6 @@ interface ContextT {
   setsocket: React.Dispatch<React.SetStateAction<Socket | null>>;
   terminal: XTerminal | null;
   setTerminal: React.Dispatch<React.SetStateAction<XTerminal | null>>;
-  disconnect: () => void;
 }
 
 // Create the context with an initial undefined value
