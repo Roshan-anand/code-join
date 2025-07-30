@@ -1,7 +1,9 @@
 import { motion } from "motion/react";
 import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 
 export default function HeroSection() {
+  const navigate = useNavigate();
   return (
     <div className="relative mx-auto my-10 flex max-w-7xl flex-col items-center justify-center">
       <div className="absolute inset-y-0 left-0 h-full w-px bg-neutral-800/80">
@@ -62,7 +64,10 @@ export default function HeroSection() {
           }}
           className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4"
         >
-          <Button className="w-60 transform rounded-lg px-6 py-2 font-medium  transition-all duration-300 hover:-translate-y-0.5 bg-text text-primary hover:bg-accent-300 hover:text-text">
+          <Button
+            className="w-60 transform rounded-lg px-6 py-2 font-medium  transition-all duration-300 hover:-translate-y-0.5 bg-text text-primary hover:bg-accent-300 hover:text-text"
+            onClick={() => navigate("/home/dashboard")}
+          >
             Get Started
           </Button>
           <button className="w-60 transform rounded-lg px-6 py-2 font-medium transition-all duration-300 hover:-translate-y-0.5 border-accent-500 border text-accent-500">

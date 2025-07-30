@@ -60,7 +60,7 @@ const CodeEditor = () => {
     }
     //setting up the run command
     if (!runCmd) return;
-    setTerminalInput(`${runCmd}\n`);
+    setTerminalInput(`\x03 clear\n ${runCmd}\n`);
   };
 
   //to save the code on unmount

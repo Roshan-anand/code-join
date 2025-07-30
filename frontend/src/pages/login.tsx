@@ -38,6 +38,7 @@ const ProviderBtn = ({ name, icon, label }: ProviderProps) => {
 
 const Login = () => {
   const navigate = useNavigate();
+
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
 
