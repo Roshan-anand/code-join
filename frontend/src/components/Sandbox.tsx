@@ -34,7 +34,7 @@ const Sandbox = () => {
     >
       <SideBar />
       <button
-        className="my-2 resize-btn cursor-ew-resize w-[5px] after:w-full after:h-[50px]"
+        className="my-2 resize-btn cursor-ew-resize w-[5px] relative after:absolute after:top-1/2 after:rounded-md after:left-0 after:w-full after:h-[50px] after:bg-accent-600 active:bg-accent-700"
         onMouseDown={startSidebarResize}
         onTouchStart={startSidebarResize}
       ></button>
@@ -48,7 +48,7 @@ const Sandbox = () => {
         <CodeEditor />
         {/* <CodeEditorTest /> */}
         <button
-          className="mx-2 resize-btn cursor-ns-resize h-[5px] after:w-[50px] after:h-full"
+          className="mx-2 resize-btn cursor-ns-resize h-[5px]  active:bg-accent-700 relative after:absolute after:top-0 after:left-1/2 after:bg-accent-600 after:w-[50px] after:h-full after:rounded-md"
           onMouseDown={startEditorResize}
           onTouchStart={startEditorResize}
         ></button>

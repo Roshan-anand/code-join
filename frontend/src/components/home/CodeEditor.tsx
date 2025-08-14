@@ -1,13 +1,12 @@
 import { Editor, OnMount, useMonaco } from "@monaco-editor/react";
 import type * as Monaco from "monaco-editor";
-import { useEffect, useState } from "react";
-import { FaCode, FaLaptopCode, FaPlay } from "react-icons/fa";
+import { useCallback, useEffect, useState } from "react";
+import { FaCode, FaLaptopCode, FaPlay, FaSave } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { ReduxState } from "../../providers/redux/store";
 import { setActiveSection } from "../../providers/redux/slices/editor";
 import useTerminalService from "../../hooks/TerminalService";
 import useEditorService from "../../hooks/EditorService";
-import { AiOutlineExport } from "react-icons/ai";
 const CodeEditor = () => {
   //global state from redux
   const dispatch = useDispatch();
@@ -17,7 +16,6 @@ const CodeEditor = () => {
   const { editorLang, openedFile, runCmd, editorCode } = useSelector(
     (state: ReduxState) => state.file
   );
-  const { roomID } = useSelector((state: ReduxState) => state.room);
 
   // Set custom theme for monaco editor
   const monaco = useMonaco();
@@ -63,17 +61,24 @@ const CodeEditor = () => {
     setTerminalInput(`\x03 clear\n ${runCmd}\n`);
   };
 
+  const saveCode = useCallback(() => {
+    if (activeSection == "code" && editor !== null) {
+      const code = editor.getValue();
+      const filteredCode = code
+        .replace(/\\/g, "\\\\")
+        .replace(/"/g, '\\"')
+        .replace(/`/g, "\\`");
+
+      runStream(`echo "${filteredCode}" > ${openedFile}`, false);
+    }
+  }, [activeSection, editor, openedFile, runStream]);
+
   //to save the code on unmount
   useEffect(() => {
     return () => {
-      if (activeSection == "code" && editor !== null) {
-        const code = editor.getValue();
-        const filteredCode = code.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
-
-        runStream(`echo "${filteredCode}" > ${openedFile}`, false);
-      }
+      saveCode();
     };
-  }, [activeSection, openedFile, runStream, editor]);
+  }, [saveCode]);
 
   return (
     <>
@@ -86,18 +91,16 @@ const CodeEditor = () => {
           height: `clamp(5%,${editorHeight}px,75%)`,
         }}
       >
-        <header className="py-2 px-3 bg-soft flex gap-3 items-center justify-between">
+        <header className="py-2 px-3 bg-soft flex gap-3 items-center">
           <FaCode className="icon-md" />
-          <h3 className="mr-auto">CODE</h3>
-          <button className="mr-2" onClick={handleRunPrg}>
+          <h3>CODE</h3>
+
+          <button className="ml-auto active:scale-95" onClick={saveCode}>
+            <FaSave className="icon-md" />
+          </button>
+          <button className="ml-2 active:scale-95" onClick={handleRunPrg}>
             <FaPlay className="icon-md" />
           </button>
-          <a
-            href={`https://${roomID}.${import.meta.env.VITE_SUBDOMAIN}`}
-            target="_blank"
-          >
-            <AiOutlineExport className="icon-md" />
-          </a>
         </header>
         {editorCode !== null ? (
           <>

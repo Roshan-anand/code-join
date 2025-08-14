@@ -91,9 +91,9 @@ export default function HeroSection() {
         >
           <div className="w-full overflow-hidden rounded-xl border border-gray-700">
             <img
-              src="https://assets.aceternity.com/pro/aceternity-landing.webp"
+              src="/hero.png"
               alt="Landing page preview"
-              className="aspect-[16/9] h-auto w-full object-cover"
+              className="object-cover"
               height={1000}
               width={1000}
             />

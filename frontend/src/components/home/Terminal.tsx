@@ -1,3 +1,4 @@
+import { AiOutlineExport } from "react-icons/ai";
 import { IoTerminal } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { ReduxState } from "../../providers/redux/store";
@@ -17,6 +18,7 @@ const Terminal = () => {
   const { activeSection, editorHeight, editorWidth } = useSelector(
     (state: ReduxState) => state.editor
   );
+  const { roomID } = useSelector((state: ReduxState) => state.room);
 
   // Initialize terminal
   const terminalRef = useRef<HTMLDivElement>(null);
@@ -77,6 +79,12 @@ const Terminal = () => {
       <header className="bg-soft py-2 px-3 flex items-center gap-3">
         <IoTerminal className="icon-md" />
         <h3>Terminal</h3>
+        <a className="ml-auto mr-2"
+          href={`https://${roomID}.${import.meta.env.VITE_SUBDOMAIN}`}
+          target="_blank"
+        >
+          <AiOutlineExport className="icon-md" />
+        </a>
       </header>
       <section className="flex-1 flex">
         <div ref={terminalRef} className="flex-1 size-full"></div>

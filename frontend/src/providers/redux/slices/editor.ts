@@ -1,9 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+interface initialStateType {
+  editorWidth: number;
+  editorHeight: number;
+  activeSection: "code" | "terminal" | "opt" | null;
+}
+
+const initialState: initialStateType = {
   editorWidth: 2000,
   editorHeight: 900,
-  activeSection: null
+  activeSection: null,
 };
 
 const editorSlice = createSlice({
@@ -18,13 +24,10 @@ const editorSlice = createSlice({
     },
     setActiveSection: (state, action) => {
       state.activeSection = action.payload;
-    }
+    },
   },
 });
 
-export const {
-  setEditorHeight,
-  setEditorWidth,
-  setActiveSection,
-} = editorSlice.actions;
+export const { setEditorHeight, setEditorWidth, setActiveSection } =
+  editorSlice.actions;
 export default editorSlice.reducer;
